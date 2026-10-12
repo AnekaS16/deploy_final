@@ -1,0 +1,13 @@
+.git
+**/node_modules
+**/.env
+**/.env.*
+!**/.env.example
+**/dist
+**/build
+**/__pycache__
+**/.venv
+Monad_hackathon/data_*
+Monad_hackathon/models
+Monad_hackathon/audit
+Monad_hackathon/runs

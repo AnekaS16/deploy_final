@@ -373,8 +373,8 @@ export default function App() {
         <div className="brand">
           <ShieldCheck size={24} />
           <div>
-            <b>DaanDristi</b>
-            <span lang="hi">दानदृष्टि</span>
+            <b>Smart Donation System</b>
+           
           </div>
           <em className="muted">donation provenance</em>
         </div>
@@ -384,7 +384,7 @@ export default function App() {
       <main>
         <section className="hero">
           <div className="hero-copy">
-            <p className="label"><i /> DAANDRISTI / DONATION PROVENANCE</p>
+            <p className="label"><i /> SMART DONATION SYSTEM</p>
             <h1>
               Every rupee given<br />
               leaves a <em>proof</em><br />
