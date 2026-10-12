@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: daandristi-api
+    env: docker
+    dockerfilePath: dpp-monad/api/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: RPC_URL
+        value: https://testnet-rpc.monad.xyz
+      - key: CONTRACT_ADDRESS
+        value: 0xBCD966873f48563643Bde79760eEC98a567fd7e6
+      - key: PRIVATE_KEY
+        sync: false
+      - key: ALLOWED_ORIGIN
+        sync: false
