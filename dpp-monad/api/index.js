@@ -10,6 +10,32 @@ const proof = require("../sdk/proof");
 
 const app = express();
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  const allowedOriginEnv = process.env.ALLOWED_ORIGIN;
+
+  if (origin) {
+    if (
+      !allowedOriginEnv ||
+      origin === allowedOriginEnv ||
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+    ) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  }
+
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use(express.json());
 
 
@@ -60,12 +86,15 @@ const SQLITE_FILE =
 const DATA_DIR = path.join(__dirname, "data");
 
 const ORIGINAL_RECORDS_FILE =
-  path.join(DATA_DIR, "original_records.json");
+  process.env.ORIGINAL_RECORDS_FILE
+    ? path.resolve(__dirname, process.env.ORIGINAL_RECORDS_FILE)
+    : path.join(DATA_DIR, "original_records.json");
 
 
-// Create data directory if it does not exist
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+// Create parent directory if it does not exist
+const originalRecordsDir = path.dirname(ORIGINAL_RECORDS_FILE);
+if (!fs.existsSync(originalRecordsDir)) {
+  fs.mkdirSync(originalRecordsDir, { recursive: true });
 }
 
 
@@ -993,13 +1022,7 @@ app.get("/", (req, res) => {
       "DaanDristi Blockchain API",
 
     status:
-      "running",
-
-    originalRegistry:
-      ORIGINAL_RECORDS_FILE,
-
-    donationDatabase:
-      SQLITE_FILE
+      "running"
 
   });
 
@@ -2313,7 +2336,7 @@ app.get(
 // START SERVER
 // ======================================================
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT);
 
